@@ -251,7 +251,7 @@ const LS = {
 };
 
 /* ================= anonymous usage stats (external site only) ================= */
-const TRACK = null;
+const TRACK = {"url": "https://tinzqulwzgqkvmwjdnoa.supabase.co", "key": "sb_publishable_iVVIV6zERkmUKXfVldP14A_Paj-gezw"};
 function visitorId(){
   let v=LS.get("vid",null);
   if(!/^[0-9a-f-]{36}$/.test(v||"")){ v=(crypto.randomUUID?crypto.randomUUID():"10000000-1000-4000-8000-100000000000".replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16))); LS.set("vid",v); }
