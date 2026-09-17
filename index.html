@@ -570,7 +570,7 @@ function renderHome(){
     <div><button class="btn primary start" data-start="full">بدء الاختبار</button></div>
     ${hist.length?`<section><div class="sec-h"><h2>سجل المحاولات</h2><button class="btn quiet" id="lastBtn">مراجعة آخر محاولة</button></div>
       <div class="panel scroll-x"><table class="grid"><tr><th>التاريخ</th><th>النتيجة</th><th>الوقت المستغرق</th><th>متوسط السؤال</th><th>غير مجاب</th></tr>${hist.slice().reverse().slice(0,15).map(h=>`<tr><td class="num">${fmtDate(h.date)}</td><td class="num"><b>${pctOf(h.correct,h.total)}%</b> (${h.correct}/${h.total})</td><td class="num">${fmtClock(h.usedSec)}</td><td class="num">${fmtMS(h.usedSec/h.total)}</td><td class="num">${h.unanswered}</td></tr>`).join("")}</table></div></section>`:""}
-    <footer class="credit"><div><span>برمجة وتطوير:</span><b>احمد الحربي</b></div><div><span>للتواصل:</span><a href="mailto:a-2011a@hotmail.com">a-2011a@hotmail.com</a></div>${TRACK?`<div><span>تُسجَّل إحصاءات استخدام مجهولة الهوية (عدد الزيارات والنتائج) لتحسين المنصة.</span></div>`:""}</footer>
+    <footer class="credit"><div><span>برمجة وتطوير:</span><b>احمد الحربي</b></div><div><span>للتواصل:</span><a href="mailto:a-2011a@hotmail.com">a-2011a@hotmail.com</a></div></footer>
   </div>`;
   $("#home").querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>startExam(b.dataset.start));
   if(saved){ $("#resumeBtn").onclick=()=>{ X=saved; X.paused=false; enterExam(); }; $("#discardBtn").onclick=()=>confirmModal("حذف المحاولة غير المكتملة؟","لن تُحتسب في السجل.","حذف",()=>{ LS.del("exam"); renderHome(); }); }
