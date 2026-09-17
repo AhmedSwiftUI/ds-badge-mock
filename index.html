@@ -641,7 +641,13 @@ function choose(oi){
   const s=X.qs[X.cur], multi=s.q.answer.length>1;
   if(multi){ const i=s.sel.indexOf(oi); if(i>=0) s.sel.splice(i,1); else if(s.sel.length<s.q.answer.length) s.sel.push(oi); else return; }
   else s.sel = s.sel[0]===oi ? [] : [oi];
-  LS.set("exam",X); renderQ(); renderNav(); renderTimer();
+  LS.set("exam",X);
+  $("#qpane").querySelectorAll(".opt").forEach(b=>{
+    const selected=s.sel.includes(+b.dataset.oi);
+    b.classList.toggle("sel",selected);
+    b.setAttribute("aria-checked",String(selected));
+  });
+  renderNav(); renderTimer();
 }
 function toggleFlag(){ const s=X.qs[X.cur]; s.flag=!s.flag; LS.set("exam",X); renderQ(); renderNav(); }
 function go(i){ if(i<0||i>=X.qs.length) return; X.cur=i; LS.set("exam",X); renderQ(); renderNav(); }
@@ -695,11 +701,11 @@ function renderResults(R){
         <div><b class="num">${fmtMS(avg)}</b><span>متوسط السؤال (المتاح 1:30)</span></div>
         <div><b class="num">${R.unanswered}</b><span>بلا إجابة${R.timeUp?" — انتهى الوقت":""}</span></div>
         <div><b class="num">${R.pauses||0}</b><span>مرات الإيقاف المؤقت</span></div></div></div>
-    ${advice.length?`<section><div class="sec-h"><h2>ما الذي تعمل عليه</h2></div><div class="panel" style="padding:12px 16px"><ul style="margin:0;padding-inline-start:20px">${advice.map(a=>`<li>${a}</li>`).join("")}</ul></div></section>`:""}
+    ${advice.length?`<section><div class="sec-h"><h2>نصائح</h2></div><div class="panel" style="padding:12px 16px"><ul style="margin:0;padding-inline-start:20px">${advice.map(a=>`<li>${a}</li>`).join("")}</ul></div></section>`:""}
     <div class="two"><section><div class="sec-h"><h2>حسب القسم</h2></div><div class="panel scroll-x">${tbl(R.byDomain,DOMAINS)}</div></section>
       <section><div class="sec-h"><h2>حسب مستوى الشارة</h2><span class="hint">مؤشر تقريبي؛ العتبات الرسمية غير معلنة</span></div><div class="panel scroll-x">${tbl(R.byLevel,LEVELS)}</div></section></div>
-    <section><div class="sec-h"><h2>أبطأ الأسئلة</h2><span class="hint">هنا يضيع الوقت</span></div><div class="panel scroll-x"><table class="grid"><tr><th>السؤال</th><th>الوقت</th><th>النتيجة</th><th>القسم</th></tr>${slow.map(x=>`<tr><td><a href="#rv${x.i}" data-jump="${x.i}" class="num">#${x.i+1}</a></td><td class="num">${fmtMS(x.s.t)}</td><td>${x.s.ok?"صحيحة":x.s.sel.length?"خاطئة":"بلا إجابة"}</td><td>${DOMAINS[x.s.q.domain].ar}</td></tr>`).join("")}</table></div></section>
-    <section><div class="sec-h"><h2>مراجعة الأسئلة</h2><div class="chips" id="rvFilter"><button class="chip on" data-f="wrong">الخاطئة</button><button class="chip" data-f="flag">المعلَّمة</button><button class="chip" data-f="skip">بلا إجابة</button><button class="chip" data-f="all">الكل</button></div></div>
+    <section><div class="sec-h"><h2>اكثر الاجوبة استغراقا للوقت</h2></div><div class="panel scroll-x"><table class="grid"><tr><th>السؤال</th><th>الوقت</th><th>النتيجة</th><th>القسم</th></tr>${slow.map(x=>`<tr><td><a href="#rv${x.i}" data-jump="${x.i}" class="num">#${x.i+1}</a></td><td class="num">${fmtMS(x.s.t)}</td><td>${x.s.ok?"صحيحة":x.s.sel.length?"خاطئة":"بلا إجابة"}</td><td>${DOMAINS[x.s.q.domain].ar}</td></tr>`).join("")}</table></div></section>
+    <section><div class="sec-h"><h2>مراجعة الأسئلة</h2><div class="chips" id="rvFilter" dir="rtl"><button class="chip" data-f="all">الكل</button><button class="chip on" data-f="wrong">الخاطئة</button><button class="chip" data-f="flag">المعلَّمة</button><button class="chip" data-f="skip">بلا إجابة</button></div></div>
       <div id="rvList"></div></section></div>`;
   let filt = R.correct===R.total ? "all" : "wrong";
   const list=()=>{ $("#rvFilter").querySelectorAll(".chip").forEach(c=>c.classList.toggle("on",c.dataset.f===filt));
